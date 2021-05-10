@@ -1,2 +1,2 @@
-# GetDataLearning-
+# GetDataLearning
 курс "Методы сбора и обработки данных из сети Интернет"
