@@ -66,17 +66,32 @@ def salary(s: str) -> dict:
 
     if len(min_max) == 1:
         if r_min.findall(sr):
-            result["min"] = min_max[0]
+            try:
+                result["min"] = int(min_max[0])
+            except:
+                result["min"] = min_max[0]
         elif r_max.findall(sr):
-            result["max"] = min_max[0]
+            try:
+                result["max"] = int(min_max[0])
+            except:
+                result["max"] = min_max[0]
         else:
-            result["stable"] = min_max[0]
+            try:
+                result["stable"] = int(min_max[0])
+            except:
+                result["stable"] = min_max[0]
     elif len(min_max) == 2:
-        result["min"] = min_max[0]
-        result["max"] = min_max[1]
+        try:
+            result["min"] = int(min_max[0])
+        except:
+            result["min"] = min_max[0]
+        try:
+            result["max"] = int(min_max[1])
+        except:
+            result["max"] = min_max[1]
     c = r_curency.search(sr)
     if c:
-        result["curr"] = curency[c.group(0)]
+        result["curr"] = curency.get(c.group(0))
     return result
 
 
@@ -99,33 +114,27 @@ sites: dict = {'hh.ru':
                     "name": ".//*[@class = '_1h3Zg _2rfUm _2hCDz _21a7u']/a",
                     "salary": ".//*[contains(@class, 'f-test-text-company-item-salary')]",
                     "company": ".//*[contains(@class, 'f-test-text-vacancy-item-company-name')]/a"
-                    },
-               'www.rabota.ru':
-                   {"search": r"",
-                    "next": r"//*[@d='M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z']/ancestor::a",
-                    "next_link": r"//*[@d='M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z']/ancestor::a",
-                    "keyword": "query",
-                    "attrs": {"sort": "relevance"},
-                    "vacancies": "//*[@class = 'vacancy-preview-card__top']",
-                    "name": ".//*[@class = 'vacancy-preview-card__title']/a",
-                    "salary": ".//*[contains(@class, 'vacancy-preview-card__salary')]/a",
-                    "company": ".//*[@class = 'vacancy-preview-card__company-name']/a",
-                    "encode": "iso-8859-1",
-                    "decode": "utf8"
-                    # .encode('iso-8859-1').decode('utf8')
-                    },
-               # лимит на количество записей
-               'limit': 100
+                    }
+    # ,
+    #            'www.rabota.ru':
+    #                {"search": r"",
+    #                 "next": r"//*[@d='M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z']/ancestor::a",
+    #                 "next_link": r"//*[@d='M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z']/ancestor::a",
+    #                 "keyword": "query",
+    #                 "attrs": {"sort": "relevance"},
+    #                 "vacancies": "//*[@class = 'vacancy-preview-card__top']",
+    #                 "name": ".//*[@class = 'vacancy-preview-card__title']/a",
+    #                 "salary": ".//*[contains(@class, 'vacancy-preview-card__salary')]/a",
+    #                 "company": ".//*[@class = 'vacancy-preview-card__company-name']/a",
+    #                 "encode": "iso-8859-1",
+    #                 "decode": "utf8"
+    #                 # .encode('iso-8859-1').decode('utf8')
+    #                 }
                }
 params = {'text': 'a'}
 headers = {'User-Agent': 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0'}
 
 for site in list(sites.keys()):
-    # ограничение для контроля количества возвращаемых значений
-    limit = sites['limit']
-    if site == 'limit':
-        # c работа.ру не срослось.
-        break;
     coder = setup_coder(sites[site].get("encode"), sites[site].get("decode"))
     link = sites[site]["search"]
     params = {sites[site]["keyword"]: text}
@@ -137,7 +146,6 @@ for site in list(sites.keys()):
         tree = lxml.html.parse(response.raw)
 
         for e in tree.xpath(sites[site]["vacancies"]):
-            print(response.url)
             d = {"site": site, "company": "", "name": "", "min": "", "stable": "", "max": "", "curr": ""}
             if len(e.xpath(sites[site]["name"])):
                 # print(tostring(e.xpath(sites[site]["name"])[0]))
@@ -152,9 +160,6 @@ for site in list(sites.keys()):
                 # print(e.xpath(sites[site]["company"])[0].text_content())
                 d["company"] = re.sub(r'\s+', ' ', coder(e.xpath(sites[site]["company"])[0].text_content()))
             result.append(d)
-            limit -= 1
-            if not limit: break
-        if not limit: break
 
         params = None
         link = tree.xpath(sites[site]["next"])
@@ -164,6 +169,5 @@ for site in list(sites.keys()):
         else:
             break
 df = pd.DataFrame(result)
-print(df)
 
 # pprint(len(serials_list))
