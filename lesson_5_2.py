@@ -48,7 +48,7 @@ while ccnt != ecnt:
         if not t:
             break
     ecnt = len(driver.find_elements_by_xpath(xpath_itm))
-    print(ccnt, ecnt)
+    #print(ccnt, ecnt)
 
 ### запись в БД ###
 client = MongoClient('127.0.0.1', 27017)
@@ -61,5 +61,5 @@ result = []
 for e in driver.find_elements_by_xpath(xpath_scr):
     pass
     j = e.get_attribute('innerHTML')
-    print(json.loads(j.split("[")[3].split("]")[0].replace(r'\n','').replace('\'','"')))
+    #print(json.loads(j.split("[")[3].split("]")[0].replace(r'\n','').replace('\'','"')))
     newMvideo.insert_one(j)

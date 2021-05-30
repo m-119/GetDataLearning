@@ -87,7 +87,7 @@ for f in menu:
                     break
                 except Exception as e:
                     pass
-                    print(e)
+                    #print(e)
                     continue
             while True:
                 try:
@@ -96,7 +96,7 @@ for f in menu:
                     break
                 except Exception as e:
                     pass
-                    print(e)
+                    #print(e)
                     continue
             while True:
                 try:
@@ -105,7 +105,7 @@ for f in menu:
                     break
                 except Exception as e:
                     pass
-                    print(e)
+                    #print(e)
                     continue
             while True:
                 try:
@@ -114,9 +114,9 @@ for f in menu:
                     break
                 except Exception as e:
                     pass
-                    print(e)
+                    #print(e)
                     continue
-            print("-----------------------------")
+            #print("-----------------------------")
         # папка пуста?
         else:
             break
@@ -136,7 +136,7 @@ for f in menu:
 #
 #
 
-print(result)
+#print(result)
 
 pass
 
