@@ -10,7 +10,7 @@ driver = webdriver.Chrome()
 params = {
     'link': 'https://account.mail.ru/login',
     'login': 'study.ai_172@mail.ru',
-    'pwd': 'NextPassword172!'
+    'pwd': 'NextPassword****'
 }
 
 driver.get(params.get('link'))
